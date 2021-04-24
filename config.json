@@ -1,0 +1,23 @@
+{
+	"network": "transformer",
+	"loss": "quadrupletloss",
+	"alt_loss": "False",
+	"single_class_classifiers": ["knn"],
+	"multi_class_classifiers": ["knn"],
+	"image_size": 96,
+	"batch_size": 24,
+	"mining": [],
+	"min_pos_dist": 1.0,
+	"max_pos_dist": 5.0,
+	"min_neg_dist": 10.0,
+	"max_neg_dist": 25.0,
+	"margin": 0.5,
+	"validation_nb": 5000,
+	"validation_map": "osm",
+	"norm_output": "True", 
+	"supervised": "False", 
+	"output_size": 64,
+	"singleClassTreshold": 0.0,
+	"valIteration": 5,
+	"random_reset": 1.0
+}

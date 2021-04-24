@@ -1,0 +1,12 @@
+gluonnlp==0.10.0
+scikit_fuzzy==0.4.2
+opencv_python==4.4.0.46
+scipy==1.6.1
+numpy==1.20.1
+rasterio==1.2.1
+requests==2.25.1
+matplotlib==3.4.1
+mxnet_cu110==1.9.0b20201117
+mxnet==1.8.0.post0
+scikit_learn==0.24.1
+tensorboardX==2.2

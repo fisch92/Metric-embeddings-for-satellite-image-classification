@@ -157,10 +157,11 @@ class ResNext(HybridBlock):
 
     def __init__(self, layers, cardinality, bottleneck_width,
                  classes=1000, last_gamma=False, use_se=False, deep_stem=False, avg_down=False,
-                 stem_width=64, norm_layer=BatchNorm, norm_kwargs=None, **kwargs):
+                 stem_width=64, norm_layer=BatchNorm, norm_kwargs=None, norm_output=True, **kwargs):
         super(ResNext, self).__init__(**kwargs)
         self.cardinality = cardinality
         self.bottleneck_width = bottleneck_width
+        self.norm_output = norm_output
         channels = 64
 
         with self.name_scope():
@@ -189,13 +190,15 @@ class ResNext(HybridBlock):
                                                    False if i == 0 else avg_down, i + 1,
                                                    norm_layer=norm_layer, norm_kwargs=norm_kwargs))
                 channels *= 2
-            #self.features.add(nn.GlobalAvgPool2D())
+            self.features.add(nn.GlobalAvgPool2D())
 
             self.output = nn.HybridSequential(prefix='')
-            #self.output.add(nn.Dense(classes))
-            self.output.add(nn.Conv2D(channels=1, kernel_size=3, strides=1,
-                                            padding=1, use_bias=False))
-            self.output.add(nn.LayerNorm())
+            self.output.add(nn.Dense(classes))
+            #self.output.add(nn.Activation('tanh'))
+            #self.output.add(nn.Conv2D(channels=classes, kernel_size=3, strides=2,
+            #                                padding=1, use_bias=True))
+            if norm_output:
+                self.output.add(nn.LayerNorm())
 
     def _make_layer(self, channels, num_layers, stride, last_gamma, use_se, avg_down, stage_index,
                     norm_layer=BatchNorm, norm_kwargs=None):
@@ -219,11 +222,11 @@ class ResNext(HybridBlock):
         mean = mean.expand_dims(axis=1)
         var = var.expand_dims(axis=1)
         normed = ((x-mean)/(F.sqrt(var)+1e-12))'''
-        #print(normed)
         return x
 
 # Specification
-resnext_spec = {50: [3, 4, 6, 3],
+resnext_spec = {18: [2, 2, 2, 2],
+				50: [3, 4, 6, 3],
                 101: [3, 4, 23, 3]}
 
 
@@ -306,6 +309,36 @@ def resnext50_32x4d(**kwargs):
     """
     kwargs['use_se'] = False
     return get_resnext(50, 32, 4, **kwargs)
+    
+
+def resnext18_32x4d(**kwargs):
+    r"""ResNext50 32x4d model from
+
+    `"Aggregated Residual Transformations for Deep Neural Network"
+    <http://arxiv.org/abs/1611.05431>`_ paper.
+    Parameters
+    ----------
+    cardinality: int
+        Number of groups
+    bottleneck_width: int
+        Width of bottleneck block
+    pretrained : bool or str
+        Boolean value controls whether to load the default pretrained weights for model.
+        String value represents the hashtag for a certain version of pretrained weights.
+    ctx : Context, default CPU
+        The context in which to load the pretrained weights.
+
+    root : str, default '~/.mxnet/models'
+        Location for keeping the model parameters.
+    norm_layer : object
+        Normalization layer used (default: :class:`mxnet.gluon.nn.BatchNorm`)
+        Can be :class:`mxnet.gluon.nn.BatchNorm` or :class:`mxnet.gluon.contrib.nn.SyncBatchNorm`.
+    norm_kwargs : dict
+        Additional `norm_layer` arguments, for example `num_devices=4`
+        for :class:`mxnet.gluon.contrib.nn.SyncBatchNorm`.
+    """
+    kwargs['use_se'] = False
+    return get_resnext(18, 16, 4, **kwargs)
 
 
 def resnext101_32x4d(**kwargs):

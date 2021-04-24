@@ -1,5 +1,7 @@
 import os
+import random
 import mxnet as mx
+import numpy as np
 import mxnet.ndarray as nd
 from mxnet import gluon
 from mxnet import autograd
@@ -8,45 +10,52 @@ from utils.math import Distances
 from mxnet.gluon.loss import L2Loss
 from mxnet import lr_scheduler
 
+from network.abstractNet import AbstractNet
 
-class TripletNet():
+class TripletNet(AbstractNet):
 
-	def __init__(self, name='tripletnet', ctx=mx.gpu(), loss=Distances.L2_Dist, learning_rate=0.02, margin=0.5, net=resnext50_32x4d(ctx=mx.gpu())):
-		self.name = name
-		self.ctx = ctx
+    '''
+        Wang, Jiang, Y. Song, T. Leung, C. Rosenberg, J. Wang, J. Philbin,
+        B. Chen und Y. Wu (2014). Learning fine-grained image similarity with deep
+        ranking. In: Proceedings of the IEEE Conference on Computer Vision and Pattern
+        Recognition, S. 1386–1393.
 
-		self.net = net
-		self.load()
-		
-		scheduler = lr_scheduler.FactorScheduler(base_lr=learning_rate, step=100, factor=0.9)
-		self.trainer = gluon.Trainer(self.net.collect_params(), mx.optimizer.Adam(learning_rate=learning_rate, lr_scheduler=scheduler))
-		self.loss = loss
-		
-		self.margin = margin
-		
+        Hoffer, Elad und N. Ailon (2015). Deep metric learning using triplet net-
+        work . In: International Workshop on Similarity-Based Pattern Recognition, S. 84–
+        92. Springer.
 
-	def predict(self, batch):
-		return self.net(batch)
+        Jean, Neal, S. Wang, A. Samar, G. Azzari, D. Lobell und S. Ermon
+        (2019). Tile2Vec: Unsupervised representation learning for spatially distributed data.
+        In: Proceedings of the AAAI Conference on Artificial Intelligence, Bd. 33, S. 3967–
+        3974.
+    '''
 
-	def train_step(self, pred_batch, pos_batch, neg_batch):
-		with autograd.record():
-			emb_pred = self.net(pred_batch)
-			emb_pos = self.net(pos_batch)
-			emb_neg = self.net(neg_batch)
+    def __init__(self, loss=Distances.MSE_Dist, margin=0.5, alt_loss=False):
+        super(QuadrupletNet, self).__init__(**kwargs)
+        
+        self.loss = loss
+        self.alt_loss = alt_loss
+        self.margin = margin
 
-			loss = self.loss(emb_pred, emb_pos) - self.loss(emb_pred, emb_neg) + self.margin*nd.ones(pred_batch.shape[0], ctx=self.ctx)
-			loss = nd.relu(loss)
+    def record_grad(self, triplet_batch, ctx):
+        pred_batch, pos_batch, neg_batch = triplet_batch
+        pred_batch = nd.array(pred_batch, ctx=cctx)
+        pos_batch = nd.array(pos_batch, ctx=cctx)
+        neg_batch = nd.array(neg_batch, ctx=cctx)
+        
+        with autograd.record():
 
-		loss.backward()
-		self.trainer.step(pred_batch.shape[0])
+            pred = self.net(nd.concat(pred_batch, pos_batch, neg_batch, dim=0))
+            emb_pred, emb_pos, emb_neg = nd.split(pred, 3, axis=0)
 
-		return loss
+            if self.alt_loss:
+                loss1 = nd.exp(nd.sqrt(self.loss(emb_pred, emb_pos)))/(nd.exp(nd.sqrt(self.loss(emb_pred, emb_pos)))+nd.exp(nd.sqrt(self.loss(emb_pred, emb_neg))))
+                loss2 = nd.exp(nd.sqrt(self.loss(emb_pred, emb_neg)))/(nd.exp(nd.sqrt(self.loss(emb_pred, emb_pos)))+nd.exp(nd.sqrt(self.loss(emb_pred, emb_neg))))
+                loss = self.loss(loss1, loss2-nd.ones(pred_batch.shape[0], ctx=ctx))
+            else:
+                loss = self.loss(emb_pred, emb_pos) - self.loss(emb_pred, emb_neg) + nd.full(pred_batch.shape[0], self.margin, ctx=ctx)
+            loss = nd.relu(loss)
 
-	def save(self):
-		self.net.save_parameters(self.name)
-
-	def load(self, init=mx.init.Xavier()):
-		if os.path.exists(self.name):
-			self.net.load_parameters(self.name, ctx=self.ctx)
-		else:
-			self.net.initialize(init=init, ctx=self.ctx)
+        loss.backward()
+            
+        return loss
