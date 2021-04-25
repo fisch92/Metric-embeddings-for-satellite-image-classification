@@ -47,6 +47,16 @@ TODO: [DEiT](https://github.com/facebookresearch/deit)
 2. [QuadrupletLoss](https://arxiv.org/abs/1704.01719)
 3. [MagNetLoss](https://arxiv.org/abs/1511.05939)
 
+### Supervised/Unsupervised
+
+1. Train supervised with label from [OSM](https://osmlanduse.org)/[CLC](https://land.copernicus.eu/pan-european/corine-land-cover)
+2. Train unsupervised with distance of tile ([Tile2Vec](https://github.com/ermongroup/tile2vec))
+	```
+	Jean, Neal, S. Wang, A. Samar, G. Azzari, D. Lobell und S. Ermon
+	(2019). Tile2Vec: Unsupervised representation learning for spatially distributed data.
+	In: Proceedings of the AAAI Conference on Artificial Intelligence, Bd. 33, S. 3967–3974.
+	``` 
+
 ### Evaluation
 
 1. Single Class Evaluation
