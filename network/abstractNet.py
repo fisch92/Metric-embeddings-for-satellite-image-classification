@@ -7,7 +7,7 @@ from network.resnext import resnext50_32x4d
 
 class AbstractNet():
 
-    def __init__(self, name='net', ctx=[mx.gpu()], learning_rate=0.0002, net=resnext50_32x4d(ctx=mx.gpu()), load=True):
+    def __init__(self, name='net', ctx=[mx.gpu()], learning_rate=0.0002, net=resnext50_32x4d(ctx=mx.gpu()), load=True, **kwargs):
         self.name = name
         self.ctx = ctx
         self.net = net

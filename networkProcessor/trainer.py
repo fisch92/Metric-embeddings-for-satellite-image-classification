@@ -43,7 +43,7 @@ class Trainer():
 		self.batchSampler = batchSampler
 
 		#for validation reserved samples
-		self.poolBatchSampler = PoolBatchSampler(batch_size, imageSampler, ctx=ctx[0], channels=5 if validation_map == GEOMAP.TILE2VEC else 3)
+		self.poolBatchSampler = PoolBatchSampler(batch_size, imageSampler, ctx=ctx[0], channels=3)
 		self.name = name
 		self.batch_size = batch_size
 

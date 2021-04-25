@@ -18,7 +18,7 @@ from dataProcessor.batchSampler.abstractBatchSampler import AbstractBatchSampler
 
 class QuadrupletBatchSampler():
 
-    def __init__(self, distance=None, mining=[], random_mining_iterations=5):
+    def __init__(self, *, distance=None, mining=[], random_mining_iterations=5):
         super(QuadrupletBatchSampler, self).__init__(**kwargs)
         self.distance = distance
         self.mining = mining

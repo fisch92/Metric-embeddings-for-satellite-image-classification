@@ -50,7 +50,7 @@ class QuadrupletTrainer(Trainer):
 		else:
 			imageSampler = ImageSampler(min_pos_dist, max_pos_dist, min_neg_dist, max_neg_dist, image_size, validationmap=validation_map, random_reset=random_reset, singleClassTreshold=singleClassTreshold)
 		#batchSampler = TripletBatchSampler(batch_size, imageSampler, tripletNet.predict, Distances.L2_Dist, mining, random_mining_iterations=10, ctx=ctx)
-		batchSampler = QuadrupletBatchSampler(batch_size, imageSampler, quadrupletNet.predict, Distances.L2_Dist, mining=mining, random_mining_iterations=3, ctx=ctx[0])
+		batchSampler = QuadrupletBatchSampler(batch_size=batch_size, imageSampler=imageSampler, net=quadrupletNet.predict, distance=Distances.L2_Dist, mining=mining, random_mining_iterations=3, ctx=ctx[0])
 		
 		super().__init__(
 			imageSampler=imageSampler, 

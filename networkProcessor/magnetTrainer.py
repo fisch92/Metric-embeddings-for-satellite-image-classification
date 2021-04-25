@@ -45,13 +45,13 @@ class MagNetTrainer(Trainer):
 			magnet = MagNet(ctx=ctx, margin=margin, margin2=margin2, net=net, load=load, name=name)
 		
 		if supervised:
-			imageSampler = SupervisedImageSampler(image_size, validationmap=validation_map, singleClassTreshold=singleClassTreshold)
+			image_sampler = SupervisedImageSampler(image_size, validationmap=validation_map, singleClassTreshold=singleClassTreshold)
 		else:
-			imageSampler = ImageSampler(min_pos_dist, max_pos_dist, min_neg_dist, max_neg_dist, image_size, validationmap=validation_map, random_reset=random_reset, singleClassTreshold=singleClassTreshold)
-		batchSampler = MagNetBatchSampler(batch_size, imageSampler, magnet.predict, Distances.L2_Dist, mining, random_mining_iterations=3, ctx=ctx[0])
+			image_sampler = ImageSampler(min_pos_dist, max_pos_dist, min_neg_dist, max_neg_dist, image_size, validationmap=validation_map, random_reset=random_reset, singleClassTreshold=singleClassTreshold)
+		batchSampler = MagNetBatchSampler(batch_size=batch_size, image_sampler=image_sampler, net=magnet.predict, ctx=ctx[0])
 		
 		super().__init__(
-			imageSampler=imageSampler,
+			imageSampler=image_sampler,
 			batchSampler=batchSampler, 
 			net=magnet,
 			name='MagNet',

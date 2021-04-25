@@ -18,7 +18,7 @@ from dataProcessor.batchSampler.abstractBatchSampler import AbstractBatchSampler
 
 class TripletBatchSampler():
 
-    def __init__(self, distance=None, mining=[], random_mining_iterations=5, ctx=mx.gpu()):
+    def __init__(self, *, distance=None, mining=[], random_mining_iterations=5, ctx=mx.gpu()):
         super(TripletBatchSampler, self).__init__(**kwargs)
         
         self.distance = distance
