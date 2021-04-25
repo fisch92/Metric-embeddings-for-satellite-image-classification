@@ -9,10 +9,12 @@ This repository contains methods for generating and evaluating metric embeddings
 1. Random sampling  
 	Choose every tile randomly across the entire map.
 	![random sampling](doc/images/random_sampling.png)
+	Quelle: [Sentinel 2 Cloudless](https://s2maps.eu)
 
 2. Cluster sampling  
 	Choose tiles in clusters. (required for unsupervised magnet)
 	![cluster sampling](doc/images/cluster_sampling.png)
+	Quelle: [Sentinel 2 Cloudless](https://s2maps.eu)
 
 ### Mining 
 
@@ -142,6 +144,8 @@ tensorboard --port XXXX --logdir results/XXXX
 
 
 ## Results
+
+TODO: Add results
 
 ### Best tested results unsupervised
 ```
