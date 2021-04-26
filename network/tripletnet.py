@@ -30,8 +30,8 @@ class TripletNet(AbstractNet):
         3974.
     '''
 
-    def __init__(self, loss=Distances.MSE_Dist, margin=0.5, alt_loss=False):
-        super(QuadrupletNet, self).__init__(**kwargs)
+    def __init__(self, loss=Distances.MSE_Dist, margin=0.5, alt_loss=False, **kwargs):
+        super(TripletNet, self).__init__(**kwargs)
         
         self.loss = loss
         self.alt_loss = alt_loss
@@ -39,9 +39,9 @@ class TripletNet(AbstractNet):
 
     def record_grad(self, triplet_batch, ctx):
         pred_batch, pos_batch, neg_batch = triplet_batch
-        pred_batch = nd.array(pred_batch, ctx=cctx)
-        pos_batch = nd.array(pos_batch, ctx=cctx)
-        neg_batch = nd.array(neg_batch, ctx=cctx)
+        pred_batch = nd.array(pred_batch, ctx=ctx)
+        pos_batch = nd.array(pos_batch, ctx=ctx)
+        neg_batch = nd.array(neg_batch, ctx=ctx)
         
         with autograd.record():
 

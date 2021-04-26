@@ -16,14 +16,14 @@ from dataProcessor.tiffReader import GEOMAP
 
 from dataProcessor.batchSampler.abstractBatchSampler import AbstractBatchSampler
 
-class TripletBatchSampler():
+class TripletBatchSampler(AbstractBatchSampler):
 
-    def __init__(self, *, distance=None, mining=[], random_mining_iterations=5, ctx=mx.gpu()):
-        super(TripletBatchSampler, self).__init__(**kwargs)
-        
+    def __init__(self, *, distance=None, mining=[], random_mining_iterations=5, ctx=mx.gpu(), **kwargs):
         self.distance = distance
         self.mining = mining
         self.random_mining_iterations = random_mining_iterations
+        super(TripletBatchSampler, self).__init__(**kwargs)
+        
     
     def prepareBatch(self):
         pred_batches = np.zeros((self.batch_size, self.channels, self.image_sampler.size, self.image_sampler.size))

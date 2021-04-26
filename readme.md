@@ -9,12 +9,12 @@ This repository contains methods for generating and evaluating metric embeddings
 1. Random sampling  
 	Choose every tile randomly across the entire map.
 	![random sampling](doc/images/random_sampling.png)
-	Quelle: [Sentinel 2 Cloudless](https://s2maps.eu)
+	Source: [Sentinel 2 Cloudless](https://s2maps.eu)
 
 2. Cluster sampling  
 	Choose tiles in clusters. (required for unsupervised magnet)
 	![cluster sampling](doc/images/cluster_sampling.png)
-	Quelle: [Sentinel 2 Cloudless](https://s2maps.eu)
+	Source: [Sentinel 2 Cloudless](https://s2maps.eu)
 
 ### Mining 
 
@@ -67,6 +67,7 @@ TODO: [DEiT](https://github.com/facebookresearch/deit)
 	2. MAP@R  
 		Multi label extension with the key idea of gSil
 	3. [gSil](https://www.researchgate.net/publication/262210231_Center-Wise_Intra-Inter_Silhouettes)
+3. TODO: Semantic segmentation
 
 ## Train
 
@@ -155,7 +156,7 @@ tensorboard --port XXXX --logdir results/XXXX
 
 ## Results
 
-TODO: Add results
+TODO: Add more results
 
 ### Best tested results unsupervised
 ```
@@ -163,8 +164,8 @@ TODO: Add results
 	"network": "resnext50",
 	"loss": "magnetloss",
 	"alt_loss": "False",
-	"single_class_classifiers": ["rfc"],
-	"multi_class_classifiers": ["rfc"],
+	"single_class_classifiers": ["rfc", "knn"],
+	"multi_class_classifiers": ["rfc", "knn"],
 	"image_size": 96,
 	"batch_size": 12,
 	"mining": [],
@@ -178,11 +179,19 @@ TODO: Add results
 	"norm_output": "True",
 	"supervised": "False",
 	"output_size": 64,
-	"singleClassTreshold": 0.0,
+	"singleClassTreshold": 0.0|0.8,
 	"valIteration": 5,
 	"random_reset": 0.0
 }
 ```
+Single label accuracy: 0.67  
+Multi label MAP@1: 0.44  
+Multi label MAP@10: 0.35  
+Multi label summed error: 1.08  
+
+label images in 3D embedding space, dimension reduction with UMAP 
+![umap_unsupervised](doc/images/umap_unsupervised.png)
+
 
 ### Best tested results supervised
 ```
@@ -210,3 +219,11 @@ TODO: Add results
 	"random_reset": 0.0
 }
 ```
+Single label accuracy: 0.77  
+Multi label MAP@1: 0.7  
+Multi label MAP@10: 0.66  
+Multi label summed error: 0.58  
+
+
+label images in 3D embedding space, dimension reduction with UMAP 
+![umap_supervised](doc/images/umap_supervised.png)

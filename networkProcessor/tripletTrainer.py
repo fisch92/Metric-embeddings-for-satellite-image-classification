@@ -49,7 +49,7 @@ class TripletTrainer(Trainer):
 			imageSampler = SupervisedImageSampler(image_size, validationmap=validation_map, singleClassTreshold=singleClassTreshold)
 		else:
 			imageSampler = ImageSampler(min_pos_dist, max_pos_dist, min_neg_dist, max_neg_dist, image_size, validationmap=validation_map, random_reset=random_reset, singleClassTreshold=singleClassTreshold)
-		batchSampler = TripletBatchSampler(batch_size, imageSampler, tripletNet.predict, Distances.L2_Dist, mining, random_mining_iterations=10, ctx=mx.cpu())
+		batchSampler = TripletBatchSampler(batch_size=batch_size, image_sampler=imageSampler, net=tripletNet.predict, distance=Distances.L2_Dist, mining=mining, random_mining_iterations=10, ctx=mx.cpu())
 		
 		
 		super().__init__(

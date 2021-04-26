@@ -132,9 +132,9 @@ class MultiClassValidation():
 
             ccc[key] = np.corrcoef(dists, cophe_dists)[0, 1]
 
-            mapar1[key] = Mapar.score(data, labels.astype(int), k=1)
-            mapar5[key] = Mapar.score(data, labels.astype(int), k=5)
-            mapar10[key] = Mapar.score(data, labels.astype(int), k=10)
+            mapar1[key] = Mapar.score(data, labels, k=1)
+            mapar5[key] = Mapar.score(data, labels, k=5)
+            mapar10[key] = Mapar.score(data, labels, k=10)
 
         return tsum_error, nmi, silhouette_scores, ccc, mapar1, mapar5, mapar10
 
