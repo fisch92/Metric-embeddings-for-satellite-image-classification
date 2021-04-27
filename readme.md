@@ -189,18 +189,18 @@ Multi label MAP@1: 0.44
 Multi label MAP@10: 0.35  
 Multi label summed error: 1.08  
 
-label images in 3D embedding space, dimension reduction with UMAP 
-![umap_unsupervised](doc/images/umap_unsupervised.png)
+osm label images in 3D embedding space, dimension reduction with PCA 
+![umap_unsupervised](doc/images/pca_unsupervised.gif)
 
 
 ### Best tested results supervised
 ```
 {
 	"network": "resnext50",
-	"loss": "magnetloss",
+	"loss": "tripletloss",
 	"alt_loss": "False",
-	"single_class_classifiers": ["rfc"],
-	"multi_class_classifiers": ["rfc"],
+	"single_class_classifiers": ["rfc", "knn"],
+	"multi_class_classifiers": ["rfc", "knn"],
 	"image_size": 96,
 	"batch_size": 12,
 	"mining": [],
@@ -212,7 +212,7 @@ label images in 3D embedding space, dimension reduction with UMAP
 	"validation_nb": 5000,
 	"validation_map": "osm",
 	"norm_output": "True",
-	"supervised": "False",
+	"supervised": "True",
 	"output_size": 64,
 	"singleClassTreshold": 0.0,
 	"valIteration": 5,
@@ -220,10 +220,10 @@ label images in 3D embedding space, dimension reduction with UMAP
 }
 ```
 Single label accuracy: 0.77  
-Multi label MAP@1: 0.7  
-Multi label MAP@10: 0.66  
-Multi label summed error: 0.58  
+Multi label MAP@1: 0.72  
+Multi label MAP@10: 0.7  
+Multi label summed error: 0.54  
 
 
-label images in 3D embedding space, dimension reduction with UMAP 
-![umap_supervised](doc/images/umap_supervised.png)
+osm label images in 3D embedding space, dimension reduction with PCA 
+![umap_supervised](doc/images/pca_supervised.gif)

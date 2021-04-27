@@ -38,7 +38,7 @@ def loadConfig(config, name=None, valIteration=5):
         config["supervised"] = config["supervised"] == "True"
         config["alt_loss"] = config["alt_loss"] == "True"
         config['mining'] = [MiningTypes.getType(x) for x in config['mining']]
-        config['ctx'] = [mx.gpu(1), mx.gpu(0)]
+        config['ctx'] = [mx.gpu(1)]
 
         if config["validation_map"] == 'osm':
             config["validation_map"] = GEOMAP.OSM

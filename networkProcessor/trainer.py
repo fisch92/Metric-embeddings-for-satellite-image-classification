@@ -294,7 +294,7 @@ class Trainer():
 
 		if self.logging:
 			#print((imgs[0].asnumpy()+1.)*0.5)
-			self.logger.add_embedding(np.concatenate(global_val_imgs[0:2], axis=0)[:1000, :, 0, 0], label_img=(np.concatenate(global_val_imgs[0:2], axis=0)[:1000,:3]+1.)*0.5, global_step=global_step, tag='imgs', metadata=np.concatenate(global_labels[0:2], axis=0)[:1000])
+			self.logger.add_embedding(np.concatenate(global_embs[0:2], axis=0)[:1000, :], label_img=(np.concatenate(global_val_imgs[0:2], axis=0)[:1000,:3]+1.)*0.5, global_step=global_step, tag='imgs', metadata=np.concatenate(global_labels[0:2], axis=0)[:1000])
 		
 	def single_class_validation(self, embs, val_imgs, singleClassScores):
 		if not self.single_class_validator is None:

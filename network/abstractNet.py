@@ -52,6 +52,7 @@ class AbstractNet():
 
     def load(self, init=mx.init.Xavier()):
         if os.path.exists(self.name):
+            print('load: ', self.name)
             self.net.load_parameters(self.name, ctx=[mx.cpu()]+self.ctx)
         else:
             self.net.initialize(init=init, ctx=[mx.cpu()]+self.ctx)
